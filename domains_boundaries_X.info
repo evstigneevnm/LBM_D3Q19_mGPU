@@ -21,9 +21,9 @@
 ;        (c)
 ;
     ;Global Descretization:
-Nx 300;
-Ny 100;
-Nz 100;
+Nx 150;
+Ny 50;
+Nz 50;
     ;Domain sizes:
 Lx 3.0;
 Ly 1.0;
@@ -31,7 +31,7 @@ Lz 1.0;
 
     ;Flow parameters and execution time
 Reynolds 200.0;
-timesteps 10000;
+timesteps 5000;
 
     ;We use X, Y or Z for directions in which MPI is used
 MPI_sections X; 
@@ -46,12 +46,12 @@ Block0
     Compute GPU;        Where to compute? GPU or CPU (OpenMP)
     ;Blade_ID;         used for large clasters
     Device_PCI_ID 9;   Device ID for GPU or Intel Xeon Phi on a local machine
-    FaceA W;            P - periodic, W - wall, I - inflow; O - outflow; C X - communicate to block X
-    ;FaceB W;
-    FaceB "C 1"
+    FaceA I;            P - periodic, W - wall, I - inflow; O - outflow; C X - communicate to block X
+    FaceB "C 1";
     FaceC W;
-    FaceD I;
+    FaceD W;
     FaceE W;
+    ;FaceF "C 1";
     FaceF W;
 }
 Block1 
@@ -60,12 +60,14 @@ Block1
     L_start 33;  
     Compute GPU; 
     ;Blade_ID; 
-    Device_PCI_ID 4;
+    Device_PCI_ID 3;
     FaceA "C 0";
     FaceB "C 2";
     FaceC W;
-    FaceD I;
+    FaceD W;
     FaceE W;
+    ;FaceE "C 0";
+    ;FaceF "C 2";
     FaceF W;
 }
 Block2
@@ -74,12 +76,14 @@ Block2
     L_start 66; 
     Compute GPU;
     ;Blade_ID;
-    Device_PCI_ID 5;
+    Device_PCI_ID 4;
     FaceA "C 1";
     FaceB W;
     FaceC W;
-    FaceD I;
+    FaceD W;
     FaceE W;
+    ;FaceE "C 1";
+    ;FaceF "C 3";
     FaceF W;
 }
 Block3
@@ -88,7 +92,7 @@ Block3
     L_start 60; 
     Compute GPU
     ;Blade_ID 
-    Device_PCI_ID 6;
+    Device_PCI_ID 5;
     FaceA W;
     FaceB W;
     FaceC W;
@@ -103,7 +107,7 @@ Block4
     L_start 80; 
     Compute GPU
     ;Blade_ID 
-    Device_PCI_ID 9;
+    Device_PCI_ID 6;
     FaceA W;
     FaceB W;
     FaceC W;
@@ -118,7 +122,7 @@ Block5
     L_start 85; 
     Compute GPU
     ;Blade_ID 
-    Device_PCI_ID 10;
+    Device_PCI_ID 9;
     FaceA W;
     FaceB W;
     FaceC W;

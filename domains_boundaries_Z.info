@@ -21,66 +21,66 @@
 ;        (c)
 ;
     ;Global Descretization:
-Nx 300;
+Nx 100;
 Ny 100;
-Nz 100;
+Nz 500;
     ;Domain sizes:
-Lx 3.0;
+Lx 1.0;
 Ly 1.0;
-Lz 1.0;
+Lz 5.0;
 
     ;Flow parameters and execution time
 Reynolds 200.0;
-timesteps 10000;
+timesteps 1000;
 
+    ;Number of process to decompose: 
     ;We use X, Y or Z for directions in which MPI is used
-MPI_sections X; 
+MPI_sections Z; 
     ;Units used to scale Length thus avoiding ratials, using only integers. 
     ;Note that sum_proc (L_fraction)  = MPI_fraction!
-MPI_fraction 99; 
+MPI_fraction 100; 
     ; Block 0 description
 Block0
 {
-    L_fraction 33;        fraction of the whole length in units given in MPI_fration
+    L_fraction 20;        fraction of the whole length in units given in MPI_fration
     L_start 0;          starting length of the block
     Compute GPU;        Where to compute? GPU or CPU (OpenMP)
     ;Blade_ID;         used for large clasters
     Device_PCI_ID 9;   Device ID for GPU or Intel Xeon Phi on a local machine
-    FaceA W;            P - periodic, W - wall, I - inflow; O - outflow; C X - communicate to block X
-    ;FaceB W;
-    FaceB "C 1"
+    FaceA I;            P - periodic, W - wall, I - inflow; O - outflow; C X - communicate to block X
+    FaceB W;
     FaceC W;
-    FaceD I;
+    FaceD W;
     FaceE W;
-    FaceF W;
+    FaceF "C 1";
 }
 Block1 
 {            
-    L_fraction 33; 
-    L_start 33;  
+    L_fraction 20; 
+    L_start 20;  
     Compute GPU; 
     ;Blade_ID; 
-    Device_PCI_ID 4;
-    FaceA "C 0";
-    FaceB "C 2";
+    Device_PCI_ID 3;
+    FaceA I;
+    FaceB W;
     FaceC W;
-    FaceD I;
-    FaceE W;
-    FaceF W;
+    FaceD W;
+    FaceE "C 0";
+    FaceF "C 2";
 }
 Block2
 {
-    L_fraction 33; 
-    L_start 66; 
+    L_fraction 20; 
+    L_start 40; 
     Compute GPU;
     ;Blade_ID;
-    Device_PCI_ID 5;
-    FaceA "C 1";
+    Device_PCI_ID 4;
+    FaceA I;
     FaceB W;
     FaceC W;
-    FaceD I;
-    FaceE W;
-    FaceF W;
+    FaceD W;
+    FaceE "C 1";
+    FaceF "C 3";
 }
 Block3
 {
@@ -88,14 +88,13 @@ Block3
     L_start 60; 
     Compute GPU
     ;Blade_ID 
-    Device_PCI_ID 6;
-    FaceA W;
+    Device_PCI_ID 5;
+    FaceA I;
     FaceB W;
     FaceC W;
     FaceD W;
     FaceE "C 2";
     FaceF "C 4";
-    ;FaceF W;
 }
 Block4
 {
@@ -103,13 +102,12 @@ Block4
     L_start 80; 
     Compute GPU
     ;Blade_ID 
-    Device_PCI_ID 9;
-    FaceA W;
+    Device_PCI_ID 6;
+    FaceA I;
     FaceB W;
     FaceC W;
     FaceD W;
     FaceE "C 3";
-    ;FaceF "C 5";
     FaceF W;
 }
 Block5
@@ -118,7 +116,7 @@ Block5
     L_start 85; 
     Compute GPU
     ;Blade_ID 
-    Device_PCI_ID 10;
+    Device_PCI_ID 9;
     FaceA W;
     FaceB W;
     FaceC W;
