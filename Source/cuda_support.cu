@@ -1,3 +1,22 @@
+/*
+* This file is part of the Lattice Boltzmann multiple GPU distribution. 
+(https://github.com/evstigneevnm/LBM_D3Q19_mGPU).
+* Copyright (c) 2017-2018 Evstigneev Nikolay Mikhaylovitch and Ryabkov Oleg Igorevich.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, version 2 only.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 #include "cuda_support.h"
 
 
@@ -45,10 +64,13 @@ int InitCUDA(int PCI_ID)
             {
                 cudaGetDeviceProperties(&deviceProp, j);
                 if(deviceProp.pciBusID==PCI_ID)
+                {
                     deviceNumberTemp = j;
+                    break;
+                }
             }
 
-            //printf("Using device number %i\n",deviceNumberTemp);
+            printf("Using %s@[%i:%i:%i]\n",&deviceProp,deviceProp.pciBusID,deviceProp.pciDeviceID,deviceProp.pciDomainID);
         }
         deviceNumber=deviceNumberTemp;
     

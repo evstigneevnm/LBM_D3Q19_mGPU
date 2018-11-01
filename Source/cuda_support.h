@@ -1,13 +1,31 @@
+/*
+* This file is part of the Lattice Boltzmann multiple GPU distribution. 
+(https://github.com/evstigneevnm/LBM_D3Q19_mGPU).
+* Copyright (c) 2017-2018 Evstigneev Nikolay Mikhaylovitch and Ryabkov Oleg Igorevich.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, version 2 only.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #pragma once
 
-#include "Macro.h"
-#include "cuda_safe_call.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <cstdlib>
 #include <stdarg.h>
+#include <cuda_runtime.h>
 
+#include "cuda_safe_call.h"
 //TODO: put throw everywhere!!!
 
 
@@ -24,6 +42,19 @@ void host_2_device_cpy(MyType* device, MyType* host, int Nx, int Ny, int Nz)
 }
 
 template <class MyType>
+void device_2_host_cpy(MyType* host, MyType* device, size_t size)
+{
+    CUDA_SAFE_CALL(cudaMemcpy(host, device, sizeof(MyType)*size, cudaMemcpyDeviceToHost));
+}
+
+template <class MyType>
+void host_2_device_cpy(MyType* device, MyType* host, size_t size)
+{
+    CUDA_SAFE_CALL(cudaMemcpy(device, host, sizeof(MyType)*size, cudaMemcpyHostToDevice));
+}
+
+
+template <class MyType>
 void device_2_host_cpy(MyType* host, MyType* device, int Nx, int Ny, int Nz)
 {
     int mem_size=sizeof(MyType)*Nx*Ny*Nz;
@@ -31,30 +62,21 @@ void device_2_host_cpy(MyType* host, MyType* device, int Nx, int Ny, int Nz)
 }
 
 
-
-
 template <class MyType>
 MyType* device_allocate(int Nx, int Ny, int Nz)
 {
     MyType* m_device;
     int mem_size=sizeof(MyType)*Nx*Ny*Nz;
-    
     CUDA_SAFE_CALL(cudaMalloc((void**)&m_device, mem_size));
-  
-
     return m_device;    
 }
 
 
 template <class MyType>
-MyType* device_allocate(int size)
+MyType* device_allocate(size_t size)
 {
     MyType* m_device;
-    int mem_size=sizeof(MyType)*size;
-    
-    CUDA_SAFE_CALL(cudaMalloc((void**)&m_device, mem_size));
-  
-
+    CUDA_SAFE_CALL(cudaMalloc((void**)&m_device, sizeof(MyType)*size));
     return m_device;    
 }
 
@@ -100,8 +122,7 @@ MyType* host_allocate(int Nx, int Ny, int Nz)
     array=(MyType*)malloc(sizeof(MyType)*size);
     if ( !array )
     {
-        fprintf(stderr,"\n unable to allocate memory!\n");
-        exit(-1);
+        throw std::runtime_error(std::string("host memory allocation failed"));
     }
     for(int j=0;j<size;j++)
         array[j]=(MyType)0;
@@ -111,15 +132,14 @@ MyType* host_allocate(int Nx, int Ny, int Nz)
 
 // host operations
 template <class MyType>
-MyType* host_allocate(int size)
+MyType* host_allocate(size_t size)
 {
     
     MyType* array;
     array=(MyType*)malloc(sizeof(MyType)*size);
     if ( !array )
     {
-        fprintf(stderr,"\n unable to allocate memory!\n");
-        exit(-1);
+        throw std::runtime_error(std::string("host memory allocation failed"));
     }
     for(int j=0;j<size;j++)
         array[j]=(MyType)0;

@@ -1,3 +1,23 @@
+/*
+* This file is part of the Lattice Boltzmann multiple GPU distribution. 
+(https://github.com/evstigneevnm/LBM_D3Q19_mGPU).
+* Copyright (c) 2017-2018 Evstigneev Nikolay Mikhaylovitch and Ryabkov Oleg Igorevich.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, version 2 only.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
 #include "map.h"
 
 
@@ -138,27 +158,33 @@ void copy_send_buffers_streams(dim3 dimGrid, dim3 dimBlock, int Nx, int Ny, int 
     }
     if(COM->MPI_sections=='Y')
     {
+        int blocks_x=Nx/( BLOCK_DIM_X)+1;
+        int blocks_y=Nz/( BLOCK_DIM_Y)+1;
+        dim3 blocks( blocks_x, blocks_y);        
         if(COM->Face1Bufer_size>0)
         {
-            kernel_copy_FaceY_Send_stream_negative<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face1BuferSend_device, 0, MV_d1);
+            kernel_copy_FaceY_Send_stream_negative_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face1BuferSend_device, 0, MV_d1);
             
         }
         if(COM->Face2Bufer_size>0)
         {
-            kernel_copy_FaceY_Send_stream_positive<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face2BuferSend_device, Ny-1, MV_d1);
+            kernel_copy_FaceY_Send_stream_positive_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face2BuferSend_device, Ny-1, MV_d1);
 
         }
     }
     if(COM->MPI_sections=='Z')
     {
+        int blocks_x=Nx/( BLOCK_DIM_X)+1;
+        int blocks_y=Ny/( BLOCK_DIM_Y)+1;
+        dim3 blocks( blocks_x, blocks_y);         
         if(COM->Face1Bufer_size>0)
         {
-            kernel_copy_FaceZ_Send_stream_negative<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face1BuferSend_device, 0, MV_d1);
+            kernel_copy_FaceZ_Send_stream_negative_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face1BuferSend_device, 0, MV_d1);
             
         }
         if(COM->Face2Bufer_size>0)
         {
-            kernel_copy_FaceZ_Send_stream_positive<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face2BuferSend_device, Nz-1, MV_d1);
+            kernel_copy_FaceZ_Send_stream_positive_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face2BuferSend_device, Nz-1, MV_d1);
 
         }
     }
@@ -191,28 +217,34 @@ void copy_recv_buffers_streams(dim3 dimGrid, dim3 dimBlock, int Nx, int Ny, int 
     }
     if(COM->MPI_sections=='Y')
     {
+        int blocks_x=Nx/( BLOCK_DIM_X)+1;
+        int blocks_y=Nz/( BLOCK_DIM_Y)+1;
+        dim3 blocks( blocks_x, blocks_y);         
         if(COM->Face1Bufer_size>0)
         {
-            kernel_copy_FaceY_Recv_stream_negative<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face1BuferRecv_device, 0, MV_d1);
+            kernel_copy_FaceY_Recv_stream_negative_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face1BuferRecv_device, 0, MV_d1);
             
         }
         if(COM->Face2Bufer_size>0)
         {
-            kernel_copy_FaceY_Recv_stream_positive<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face2BuferRecv_device, Ny-1, MV_d1);
+            kernel_copy_FaceY_Recv_stream_positive_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face2BuferRecv_device, Ny-1, MV_d1);
 
         }
     }
     if(COM->MPI_sections=='Z')
     {
+        int blocks_x=Nx/( BLOCK_DIM_X)+1;
+        int blocks_y=Ny/( BLOCK_DIM_Y)+1;
+        dim3 blocks( blocks_x, blocks_y); 
         if(COM->Face1Bufer_size>0)
         {
-            kernel_copy_FaceZ_Recv_stream_negative<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face1BuferRecv_device, 0, MV_d1);
+            kernel_copy_FaceZ_Recv_stream_negative_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face1BuferRecv_device, 0, MV_d1);
 
             
         }
         if(COM->Face2Bufer_size>0)
         {
-            kernel_copy_FaceZ_Recv_stream_positive<<<dimGrid, dimBlock>>>(Nx, Ny, Nz, COM->Face2BuferRecv_device, Nz-1, MV_d1);
+            kernel_copy_FaceZ_Recv_stream_positive_2D<<<blocks, threads>>>(Nx, Ny, Nz, COM->Face2BuferRecv_device, Nz-1, MV_d1);
 
         }
     }
