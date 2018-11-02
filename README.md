@@ -1,4 +1,4 @@
-multi GPU lattice Boltzmann faramework project, mostly plane C with C++ smart arrays (In terms of host-device iteraction).
+multi GPU lattice Boltzmann faramework project, mostly plane C with small templates and structures.
 Uses CUDA streams + openmpi with cuda aware.
-Under the GPL2 licence.
+Under the GPL2 only licence.
 
