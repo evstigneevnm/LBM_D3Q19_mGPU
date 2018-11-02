@@ -31,11 +31,11 @@ Lz 1.0;
 
     ;control files. comment those to read or write no files
 input_control_file "general_out_2.dat"
-output_control_file "general_out_1.dat"
+output_control_file "general_out_2.dat"
 
     ;Flow parameters and execution time
 Reynolds 200.0;
-timesteps 130000;
+timesteps 430000;
 
     ;We use X, Y or Z for directions in which MPI is used
 MPI_sections X; 

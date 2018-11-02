@@ -182,7 +182,6 @@ int main(int argc, char *argv[])
             MPI_Finalize();
             return 0;
         }
-        //real * test = device_allocate<real>(1);
         cudaDeviceReset();
         std::cout << "proc " << COM.myrank << " uses device " << COM.device_ID << "\n";
     }
@@ -241,13 +240,13 @@ int main(int argc, char *argv[])
 
     struct timeval start, end;
     gettimeofday(&start, NULL);
-    for(int t=0;t<timesteps;t++)
+    for(int t=0;t<=timesteps;t++)
     {
         //run_single_step(dimGrid, dimBlock, Nx, Ny, Nz, &COM, MV_d1, MV_d2,  NV_d,  CV_d, omega, delta);
         run_single_step_streams(dimGrid, dimBlock, Nx, Ny, Nz, &COM, MV_d1, MV_d2,  NV_d,  CV_d, omega, delta);
 
         if((t%1000)==0){
-            printf(" [%.03lf%%]    \r",(double)(real(t+2)*100.0/real(timesteps+1)));
+            printf(" [%.03lf%%]    \r",(double)(real(t)*100.0/real(timesteps)));
             fflush(stdout);
         }
     }
