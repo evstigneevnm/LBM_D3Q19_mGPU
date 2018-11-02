@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cuda_runtime.h>
+#include "smart_array.h"
 
 #ifndef real
     #define real float
@@ -75,12 +76,15 @@ const int cy[Q]={0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 1, -1, 1, -1};
 const int cz[Q]={0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 1, -1, -1, 1, 1, -1, -1, 1};
 
 
+/************************************************************************/
+/* Boundaries WARINIG! Value defines priority!!!!                                                      */
+/************************************************************************/
 #define FLUID 0
-#define MPI_block 1
-#define WALL 2
-#define PERIODIC 3
-#define IN 4
-#define OUT 5
+#define MPI_block 5
+#define WALL 1
+#define PERIODIC 2
+#define IN 3
+#define OUT 4
 
 /************************************************************************/
 /* GPU KERNELS!!!!                                                      */
@@ -94,6 +98,7 @@ const int cz[Q]={0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 1, -1, -1, 1, 1, -1, -1, 1};
 /************************************************************************/
 /* structures!!!!                                                       */
 /************************************************************************/
+//template <typename T, storage_architecure storage>
 struct microscopic_variables
 {
     real *d0;

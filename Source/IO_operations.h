@@ -28,9 +28,9 @@
 #include "Macro.h"
 
 
-void write_control_file(char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz);
+void write_control_file(const char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz);
 
-int read_control_file(char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz);
+int read_control_file(const char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz);
 
 void write_out_file(std::string f_name, communication_variables COM, macroscopic_variables NV, control_variables CV, int Nx, int Ny, int Nz, char type, real dh, real xm=0.0, real ym=0.0, real zm=0.0);
 

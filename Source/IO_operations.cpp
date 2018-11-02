@@ -20,7 +20,7 @@
 
 #include "IO_operations.h"
 
-void write_control_file(char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz)
+void write_control_file(const char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz)
 {
 
     if (COM.myrank == MASTER) {
@@ -72,7 +72,7 @@ void write_control_file(char f_name[], communication_variables COM, microscopic_
 
 
 
-int read_control_file(char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz)
+int read_control_file(const char f_name[], communication_variables COM, microscopic_variables MV, int Nx, int Ny, int Nz)
 {
 
     int tag=0;

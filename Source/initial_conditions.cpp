@@ -173,20 +173,15 @@ void get_macroscopic(microscopic_variables MV, macroscopic_variables NV, int Nx,
 
 }
 
-// #define FLUID 0
-// #define MPI_block 1
-// #define WALL 2
-// #define PERIODIC 3
-// #define IN 4
-// #define OUT 5
+//see definition of boundaries in Macro.h
 #ifndef Face2BC
-    #define Face2BC(face) face=='W'?WALL:face=='I'?IN:face=='O'?OUT:face=='P'?PERIODIC:face=='C'?MPI_block:0
+    #define Face2BC(face) face=='W'?WALL:face=='I'?IN:face=='O'?OUT:face=='P'?PERIODIC:face=='C'?MPI_block:FLUID
 #endif
 
 void set_boundaries(int Nx, int Ny, int Nz, control_variables CV, communication_variables COM)
 {
     //priority from minimal to maximal:
-    // {I,O}, P, W, C
+    // C, {I,O}, P, W
 
     int j,k,l;
 

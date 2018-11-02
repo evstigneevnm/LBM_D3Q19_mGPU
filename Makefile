@@ -1,7 +1,7 @@
 MPI_INCLUDE_DIR = /usr/local/ompi_3_1_2/include
 MPI_LIB_DIR = /usr/local/ompi_3_1_2/lib
 CUDA_INCLUDE_DIR = /usr/local/cuda/include
-CUDA_LIB_DIR = /usr/local/ompi_3_1_2/lib
+CUDA_LIB_DIR = /usr/local/cuda/lib
 
 reduction:
 	#cuda self-written optimized reduction
@@ -21,8 +21,10 @@ solver:
 supp:
 	#supplimentary files...
 	2>result_make.txt
-	nvcc -g -m64 -arch=sm_35 Source/cuda_support.cu -c -o O/cuda_support.o 2>>result_make.txt
+	g++ -g -std=c++11 -I$(CUDA_INCLUDE_DIR) -I$(MPI_INCLUDE_DIR) Source/read_boost_pt.cpp -lm -c -o O/read_boost_pt.o 2>>result_make.txt
 	g++ -g -I$(CUDA_INCLUDE_DIR) -I$(MPI_INCLUDE_DIR) Source/IO_operations.cpp -lm -c -o O/IO_operations.o 2>>result_make.txt
+	nvcc -g -m64 -arch=sm_35 Source/cuda_support.cu -c -o O/cuda_support.o 2>>result_make.txt
+	
 
 communication:
 	#communication MPI files
@@ -34,7 +36,7 @@ main:
 	2>result_make.txt
 	nvcc -std=c++11 -I$(MPI_INCLUDE_DIR) -lm -g -arch=sm_35 -m64 -c Source/LBM_D3Q19.cu -o O/LBM_D3Q19.o 2>>result_make.txt
 	cd O; \
-	nvcc LBM_D3Q19.o map.o single_step.o stream.o stream_mpi.o collide.o cuda_support.o initial_conditions.o IO_operations.o -L$(CUDA_LIB_DIR) -L$(MPI_LIB_DIR) -lmpi -lm -o ../LBM_D3Q19.exe 2>>../result_make.txt
+	nvcc LBM_D3Q19.o map.o single_step.o stream.o stream_mpi.o collide.o cuda_support.o initial_conditions.o IO_operations.o read_boost_pt.o -L$(CUDA_LIB_DIR) -L$(MPI_LIB_DIR) -lmpi -lm -o ../LBM_D3Q19.exe 2>>../result_make.txt
 
 all:
 	make communication solver supp solver main

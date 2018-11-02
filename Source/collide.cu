@@ -46,7 +46,7 @@ __global__ void kernel_collide_0_18(real delta, real *ux_old_v, real gx, real gy
         int kk=I3(i,j,k);
 
         //Local constants!
-        real ux_in=0.1,uy_in=0.0,uz_in=0.0;
+        real ux_in=0.0,uy_in=0.1,uz_in=0.0;
         const real w[Q]={1.0/3.0, 1.0/18.0, 1.0/18.0, 1.0/18.0, 1.0/18.0, 1.0/18.0, 1.0/18.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
         const int cx[Q]={0, 1, -1, 0, 0, 0, 0, 1, -1, 1, -1, 1, -1, 1, -1, 0, 0, 0, 0};
         const int cy[Q]={0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 1, -1, 1, -1};
@@ -97,8 +97,9 @@ __global__ void kernel_collide_0_18(real delta, real *ux_old_v, real gx, real gy
             v_x=ux_in;//uinit[I3(0,j,k)];
             v_y=uy_in;
             v_z=uz_in;
-            //  ro=ro_v[I3(i,j-1,k)];
-            ro=ro_v[I3(i+1,j,k)];
+            //ro=ro_v[I3(i,j-1,k)];
+            //ro=ro_v[I3(i+1,j,k)];
+            ro=1.0;//ro_v[I3(i,j+1,k)];
         }
         else if(bc_v[kk]==OUT)
         {

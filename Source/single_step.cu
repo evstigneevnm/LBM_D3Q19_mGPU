@@ -27,7 +27,6 @@ void run_single_step(dim3 dimGrid, dim3 dimBlock, int Nx, int Ny, int Nz, commun
         kernel_collide_0_18<<< dimGrid, dimBlock>>>( delta, NV_d.H, 0.0, 0.0, 0.0, Nx, Ny, Nz, omega, NV_d.ux, NV_d.uy, NV_d.uz, NV_d.rho, CV_d.bc, MV_d1, MV_d2);
 
         exchange_boundaries_MPI(dimGrid, dimBlock, Nx, Ny, Nz, COM, MV_d2, MV_d1);
-
         kernel_stream3D_0_18_forward<<< dimGrid, dimBlock>>>(Nx, Ny, Nz, CV_d.bc, MV_d2, MV_d1);
 
 }
